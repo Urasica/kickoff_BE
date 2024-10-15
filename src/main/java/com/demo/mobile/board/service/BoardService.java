@@ -3,6 +3,7 @@ package com.demo.mobile.board.service;
 import com.demo.mobile.board.dao.Board;
 import com.demo.mobile.board.dto.BoardDTO;
 import com.demo.mobile.board.repository.BoardRepository;
+import com.demo.mobile.board.repository.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,10 +17,12 @@ import java.util.List;
 @Service
 public class BoardService {
     private final BoardRepository boardRepository;
+    private final CommentRepository commentRepository;
 
     @Autowired
-    public BoardService(BoardRepository boardRepository) {
+    public BoardService(BoardRepository boardRepository, CommentRepository commentRepository) {
         this.boardRepository = boardRepository;
+        this.commentRepository = commentRepository;
     }
 
     public List<Board> getAllBoards(){
@@ -91,6 +94,7 @@ public class BoardService {
         dto.setUpdatedAt(board.getUpdatedAt());
         dto.setUpVote(board.getUpVote());
         dto.setType(board.getType());
+        dto.setCommentCount(commentRepository.countByBoardId(board.getId()));
         return dto;
     }
 
